@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Character Certificate</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #adf7db;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.button-container {
+    text-align: center;
+}
+
+.btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center mb-4">Character Certificate</h2>
+    
+    <form id="character-form">
+        <div class="form-group">
+            <label for="student-name">Student Name:</label>
+            <input class="form-control input" type="text" id="student-name" name="student-name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="father-name">Father's Name:</label>
+            <input class="form-control input" type="text" id="father-name" name="father-name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input class="form-control input" type="text" id="dob" name="dob" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <textarea class="form-control input" id="address" name="address" rows="3" required></textarea>
+        </div>
+
+        <div class="button-container">
+            <button type="button" id="download-pdf" class="btn">Download Certificate</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    flatpickr("#dob", {
+        dateFormat: "Y-m-d",
+        maxDate: "today"
+    });
+
+    document.getElementById('download-pdf').addEventListener('click', function () {
+        var studentName = document.getElementById('student-name').value;
+        var fatherName = document.getElementById('father-name').value;
+        var dob = document.getElementById('dob').value;
+        var address = document.getElementById('address').value;
+
+        var currentDate = new Date();
+        var formattedDate = currentDate.toDateString();
+
+        var content = `
+            <div style="text-align: center;">
+                <h2>Character Certificate</h2>
+            </div>
+            <p>Date: ${formattedDate}</p>
+            <p>To Whom It May Concern,</p>
+            <p>This is to certify that ${studentName}, son/daughter of ${fatherName}, born on ${dob}, residing at ${address}, has been known to me for several years and during this period, I have found him/her to be of good moral character and upstanding reputation.</p>
+            <p>He/She has conducted himself/herself with honesty, integrity, and responsibility in all his/her endeavors. He/She has exhibited commendable behavior in various aspects of life.</p>
+            <p>Based on my interactions and observations, I have no hesitation in recommending ${studentName} for any endeavor requiring a character reference. I believe he/she will continue to uphold the highest standards of conduct and make valuable contributions wherever he/she goes.</p>
+            <p>Should you require any further information, please feel free to contact me at _ _ _ _ _ _ _ _ _ _</p>
+            <br>
+            <p>Sincerely,</p>
+            <p>${studentName}</p>
+            <p>Your Position/Title....................................</p>
+            <p>Your Contact Information _ _ _ _ _ _ _ _ _ _</p>
+        `;
+
+        html2pdf().from(content).set({
+            margin: 1,
+            filename: studentName +' Character_Certificate.pdf',
+            html2canvas: { scale: 2 },
+            jsPDF: { 
+                unit: 'in',
+                format: 'letter',
+                orientation: 'portrait' 
+            }
+        }).save();
+    });
+});
+</script>
+
+</body>
+</html>
