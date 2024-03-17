@@ -137,6 +137,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }).save();
     });
 });
+    // Disable right-click context menu
+document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+});
+
+// Disable keyboard shortcuts for inspection
+document.onkeydown = function (e) {
+    if (
+        e.ctrlKey &&
+        (e.keyCode === 67 || // Ctrl+C
+            e.keyCode === 85 || // Ctrl+U
+            e.keyCode === 83 || // Ctrl+S
+            e.keyCode === 73 || // Ctrl+I
+            e.keyCode === 74) // Ctrl+J
+    ) {
+        return false;
+    } else {
+        return true;
 </script>
 
 </body>
